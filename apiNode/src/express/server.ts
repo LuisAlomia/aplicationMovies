@@ -3,6 +3,7 @@ import cors from "cors";
 import { ConnetMongoDB } from "../config/dbConnet";
 
 import { config } from "../config/config.env";
+import { userRoute } from "./routers/UserRoute";
 
 export class Server {
   private app: Application;
@@ -25,6 +26,7 @@ export class Server {
   middleware(): void {
     this.app.use(json());
     this.app.use(cors());
+    this.app.use("/api/v1/users", userRoute);
   }
 
   run(): void {
