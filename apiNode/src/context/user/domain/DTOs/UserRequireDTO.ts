@@ -8,7 +8,7 @@ export class UserRequireDTO {
   readonly password: string;
   readonly dateOfBirth: Date;
   readonly rol: Rol;
-  readonly idLike: string;
+  readonly idLike: [];
 
   constructor(
     name: string,
@@ -18,7 +18,7 @@ export class UserRequireDTO {
     password: string,
     dateOfBirth: Date,
     rol: Rol,
-    idLike: string
+    idLike: []
   ) {
     this.name = name;
     this.lastName = lastName;

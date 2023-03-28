@@ -12,5 +12,5 @@ export interface IUser {
   password: string;
   dateOfBirth: Date;
   rol: Rol;
-  idLike: string;
+  idLike: [];
 }

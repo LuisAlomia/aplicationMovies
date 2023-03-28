@@ -9,7 +9,7 @@ export class UserValueObject implements IUser {
   readonly password: string;
   readonly dateOfBirth: Date;
   readonly rol: Rol;
-  readonly idLike: string;
+  readonly idLike: [];
 
   constructor(
     uuid: string,
@@ -18,9 +18,7 @@ export class UserValueObject implements IUser {
     userName: string,
     email: string,
     password: string,
-    dateOfBirth: Date,
-    rol: Rol,
-    idLike: string
+    dateOfBirth: Date
   ) {
     this.id = uuid;
     this.name = name;
@@ -29,7 +27,7 @@ export class UserValueObject implements IUser {
     this.email = email;
     this.password = password;
     this.dateOfBirth = dateOfBirth;
-    this.rol = rol;
-    this.idLike = idLike;
+    this.rol = Rol.user;
+    this.idLike = [];
   }
 }

@@ -17,16 +17,7 @@ export class CreateUserUseCase {
 
     if (findUser) throw new Error(`User with ${user.email} exist`);
 
-    const {
-      name,
-      lastName,
-      userName,
-      email,
-      password,
-      dateOfBirth,
-      rol,
-      idLike,
-    } = user;
+    const { name, lastName, userName, email, password, dateOfBirth } = user;
 
     const uuid = v4();
     const hastPasword = hashSync(password, 10);
@@ -38,9 +29,7 @@ export class CreateUserUseCase {
       userName,
       email,
       hastPasword,
-      dateOfBirth,
-      rol,
-      idLike
+      dateOfBirth
     );
 
     return await this._userRepository.create(newUser);

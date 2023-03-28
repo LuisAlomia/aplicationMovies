@@ -8,7 +8,7 @@ export class UserResponseDTO {
   readonly email: string;
   readonly dateOfBirth: Date;
   readonly rol: Rol;
-  readonly idLike: string;
+  readonly idLike: [];
 
   constructor(
     id: string,
@@ -18,7 +18,7 @@ export class UserResponseDTO {
     email: string,
     dateOfBirth: Date,
     rol: Rol,
-    idLike: string
+    idLike: []
   ) {
     this.id = id;
     this.name = name;

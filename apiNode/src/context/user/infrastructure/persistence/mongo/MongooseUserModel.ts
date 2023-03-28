@@ -14,7 +14,7 @@ const UserModelSchema = new Schema<User>({
   dateOfBirth: {
     type: Date,
   },
-  idLike: String,
+  idLike: [],
   rol: {
     type: String,
     enum: ["ADMIN", "USER"],
