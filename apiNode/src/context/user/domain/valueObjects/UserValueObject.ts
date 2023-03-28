@@ -1,5 +1,4 @@
 import { IUser, Rol } from "../entities/IUserEntity";
-import { v4 as uuid } from "uuid";
 
 export class UserValueObject implements IUser {
   readonly id: string;
@@ -13,6 +12,7 @@ export class UserValueObject implements IUser {
   readonly idLike: string;
 
   constructor(
+    uuid: string,
     name: string,
     lastName: string,
     userName: string,
@@ -22,7 +22,7 @@ export class UserValueObject implements IUser {
     rol: Rol,
     idLike: string
   ) {
-    this.id = uuid();
+    this.id = uuid;
     this.name = name;
     this.lastName = lastName;
     this.userName = userName;

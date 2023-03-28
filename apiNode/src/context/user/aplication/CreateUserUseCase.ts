@@ -1,3 +1,5 @@
+import { hashSync } from "bcrypt";
+import { v4 } from "uuid";
 import { IUserRepository } from "../domain/repositories/IUserRepository";
 import { UserRequireDTO } from "../domain/DTOs/UserRequireDTO";
 import { UserResponseDTO } from "../domain/DTOs/UserResponseDTO";
@@ -26,12 +28,16 @@ export class CreateUserUseCase {
       idLike,
     } = user;
 
+    const uuid = v4();
+    const hastPasword = hashSync(password, 10);
+
     const newUser = new UserValueObject(
+      uuid,
       name,
       lastName,
       userName,
       email,
-      password,
+      hastPasword,
       dateOfBirth,
       rol,
       idLike
