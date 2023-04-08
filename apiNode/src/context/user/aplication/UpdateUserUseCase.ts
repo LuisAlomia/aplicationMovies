@@ -1,5 +1,6 @@
 import { UserRequireDTO } from "../domain/DTOs/UserRequireDTO";
 import { UserResponseDTO } from "../domain/DTOs/UserResponseDTO";
+import { UserNotFount } from "../domain/errors/UserNotFount";
 import { IUserRepository } from "../domain/repositories/IUserRepository";
 
 export class UpdateUserUseCase {
@@ -15,7 +16,7 @@ export class UpdateUserUseCase {
   ): Promise<UserResponseDTO | null> {
     const findUser = await this._userRepository.findById(userId);
 
-    if (!findUser) throw new Error(`User ${userId} not found`);
+    if (!findUser) throw new UserNotFount();
 
     const updateUser = await this._userRepository.update(userId, user);
 

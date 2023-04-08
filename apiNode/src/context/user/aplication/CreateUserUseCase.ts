@@ -1,9 +1,7 @@
-import { hashSync } from "bcrypt";
-import { v4 } from "uuid";
 import { IUserRepository } from "../domain/repositories/IUserRepository";
 import { UserRequireDTO } from "../domain/DTOs/UserRequireDTO";
 import { UserResponseDTO } from "../domain/DTOs/UserResponseDTO";
-import { UserValueObject } from "../domain/valueObjects/UserValueObject";
+import { UserAlreadyExists } from "../domain/errors/UserAlreadyExists";
 
 export class CreateUserUseCase {
   private _userRepository: IUserRepository;
@@ -15,23 +13,10 @@ export class CreateUserUseCase {
   async run(user: UserRequireDTO): Promise<UserResponseDTO> {
     const findUser = await this._userRepository.findByEmail(user.email);
 
-    if (findUser) throw new Error(`User with ${user.email} exist`);
+    if (findUser) throw new UserAlreadyExists();
 
-    const { name, lastName, userName, email, password, dateOfBirth } = user;
+    const newUser = await this._userRepository.create(user);
 
-    const uuid = v4();
-    const hastPasword = hashSync(password, 10);
-
-    const newUser = new UserValueObject(
-      uuid,
-      name,
-      lastName,
-      userName,
-      email,
-      hastPasword,
-      dateOfBirth
-    );
-
-    return await this._userRepository.create(newUser);
+    return newUser;
   }
 }

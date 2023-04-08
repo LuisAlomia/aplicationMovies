@@ -6,4 +6,5 @@ export const config = {
   db: {
     uri: process.env.MONGO_URI || "mongodb://user_movies:27017",
   },
+  jwt: process.env.JWT || "secrectJWT",
 };

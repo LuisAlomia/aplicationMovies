@@ -1,8 +1,8 @@
 import { model, Schema } from "mongoose";
-import { IUser as User } from "../../../domain/entities/IUserEntity";
+import { IUser as User } from "../../../domain/models/IUserModel";
 
-const UserModelSchema = new Schema<User>({
-  id: {
+const UserEntitySchema = new Schema<User>({
+  uuid: {
     type: String,
     required: true,
   },
@@ -21,4 +21,4 @@ const UserModelSchema = new Schema<User>({
   },
 });
 
-export const MongooseUserModel = model<User>("user", UserModelSchema);
+export const MongooseUserEntity = model<User>("user", UserEntitySchema);

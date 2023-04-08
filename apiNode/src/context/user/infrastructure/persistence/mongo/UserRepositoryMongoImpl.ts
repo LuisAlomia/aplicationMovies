@@ -1,12 +1,12 @@
-import { IUser } from "../../../domain/entities/IUserEntity";
 import { UserResponseDTO } from "../../../domain/DTOs/UserResponseDTO";
 import { IUserRepository } from "../../../domain/repositories/IUserRepository";
-import { MongooseUserModel } from "./MongooseUserModel";
+import { MongooseUserEntity } from "./MongooseUserEntity";
 import { UserRequireDTO } from "../../../domain/DTOs/UserRequireDTO";
+import { MongooseLikeEntity } from "../../../../likes/infrastructure/persistences/mongo/MongooseLikeEntity";
 
 export class UserRepositoryMongoImpl implements IUserRepository {
   async findByEmail(email: string): Promise<UserResponseDTO | null> {
-    const user = await MongooseUserModel.findOne({ email: email });
+    const user = await MongooseUserEntity.findOne({ email: email });
 
     if (!user) return null;
 
@@ -25,37 +25,75 @@ export class UserRepositoryMongoImpl implements IUserRepository {
   }
 
   async findById(userId: string): Promise<UserResponseDTO | null> {
-    const user = await MongooseUserModel.findOne({ id: userId });
+    const userFind = await MongooseUserEntity.findOne({ uuid: userId });
 
-    if (!user) return null;
+    if (!userFind) return null;
 
-    const { name, lastName, userName, email, dateOfBirth, rol, idLike } = user;
+    const user = await MongooseUserEntity.aggregate([
+      {
+        $lookup: {
+          from: "likes",
+          localField: "idLike",
+          foreignField: "uuid",
+          as: "likes",
+        },
+      },
+      { $match: { uuid: userFind.uuid } },
+      { $project: { idLike: 0, likes: { _id: 0, __v: 0 } } },
+    ]);
 
     return new UserResponseDTO(
-      userId,
-      name,
-      lastName,
-      userName,
-      email,
-      dateOfBirth,
-      rol,
-      idLike
+      user[0].uuid,
+      user[0].name,
+      user[0].lastName,
+      user[0].userName,
+      user[0].email,
+      user[0].dateOfBirth,
+      user[0].rol,
+      user[0].idLike,
+      user[0].likes
     );
   }
 
-  async findAll(): Promise<IUser[]> {
-    const user = await MongooseUserModel.find();
-    return user;
+  async findAll(): Promise<UserResponseDTO[]> {
+    const user = await MongooseUserEntity.aggregate([
+      {
+        $lookup: {
+          from: "likes",
+          localField: "idLike",
+          foreignField: "uuid",
+          as: "likes",
+        },
+      },
+      { $project: { idLike: 0, _id: 0, __v: 0, likes: { _id: 0, __v: 0 } } },
+    ]);
+
+    const userResponseDTO: UserResponseDTO[] = user.map((user) => {
+      const users: UserResponseDTO = {
+        uuid: user.uuid,
+        name: user.name,
+        lastName: user.lastName,
+        userName: user.userName,
+        email: user.email,
+        dateOfBirth: user.dateOfBirth,
+        rol: user.rol,
+        idLike: user.idLike,
+        likes: user.likes,
+      };
+      return users;
+    });
+
+    return userResponseDTO;
   }
 
   async create(user: UserRequireDTO): Promise<UserResponseDTO> {
-    const saveUser = await MongooseUserModel.create(user);
+    const saveUser = await MongooseUserEntity.create(user);
 
-    const { id, name, lastName, userName, email, dateOfBirth, rol, idLike } =
+    const { uuid, name, lastName, userName, email, dateOfBirth, rol, idLike } =
       saveUser;
 
     return new UserResponseDTO(
-      id,
+      uuid,
       name,
       lastName,
       userName,
@@ -66,16 +104,18 @@ export class UserRepositoryMongoImpl implements IUserRepository {
     );
   }
 
-  async delete(userId: string): Promise<any> {
-    return await MongooseUserModel.deleteOne({ id: userId });
+  async delete(userId: string): Promise<void> {
+    await MongooseUserEntity.deleteOne({ uuid: userId });
+
+    await MongooseLikeEntity.deleteMany({ idUser: userId });
   }
 
   async update(
     userId: string,
     user: Partial<UserRequireDTO>
   ): Promise<UserResponseDTO | null> {
-    const updateUser = await MongooseUserModel.findOneAndUpdate(
-      { id: userId },
+    const updateUser = await MongooseUserEntity.findOneAndUpdate(
+      { uuid: userId },
       user,
       {
         new: true,
@@ -84,11 +124,11 @@ export class UserRepositoryMongoImpl implements IUserRepository {
 
     if (!updateUser) return null;
 
-    const { id, name, lastName, userName, email, dateOfBirth, rol, idLike } =
+    const { uuid, name, lastName, userName, email, dateOfBirth, rol, idLike } =
       updateUser;
 
     return new UserResponseDTO(
-      id,
+      uuid,
       name,
       lastName,
       userName,

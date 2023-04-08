@@ -1,6 +1,7 @@
-import { Rol } from "../entities/IUserEntity";
+import { Rol } from "../models/IUserModel";
 
 export class UserRequireDTO {
+  readonly uuid: string;
   readonly name: string;
   readonly lastName: string;
   readonly userName: string;
@@ -11,6 +12,7 @@ export class UserRequireDTO {
   readonly idLike: [];
 
   constructor(
+    uuid: string,
     name: string,
     lastName: string,
     userName: string,
@@ -20,6 +22,7 @@ export class UserRequireDTO {
     rol: Rol,
     idLike: []
   ) {
+    this.uuid = uuid;
     this.name = name;
     this.lastName = lastName;
     this.userName = userName;

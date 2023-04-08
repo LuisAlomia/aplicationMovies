@@ -6,7 +6,7 @@ export interface IUserRepository {
   findById(userId: string): Promise<UserResponseDTO | null>;
   findAll(): Promise<UserResponseDTO[]>;
   create(user: UserRequireDTO): Promise<UserResponseDTO>;
-  delete(userId: string): Promise<any>;
+  delete(userId: string): Promise<void>;
   update(
     userId: string,
     user: Partial<UserRequireDTO>

@@ -1,7 +1,7 @@
-import { IUser, Rol } from "../entities/IUserEntity";
+import { IUser, Rol } from "../models/IUserModel";
 
 export class UserValueObject implements IUser {
-  readonly id: string;
+  readonly uuid: string;
   readonly name: string;
   readonly lastName: string;
   readonly userName: string;
@@ -20,7 +20,7 @@ export class UserValueObject implements IUser {
     password: string,
     dateOfBirth: Date
   ) {
-    this.id = uuid;
+    this.uuid = uuid;
     this.name = name;
     this.lastName = lastName;
     this.userName = userName;

@@ -1,7 +1,7 @@
-import { Rol } from "../entities/IUserEntity";
+import { Rol } from "../models/IUserModel";
 
 export class UserResponseDTO {
-  readonly id: string;
+  readonly uuid: string;
   readonly name: string;
   readonly lastName: string;
   readonly userName: string;
@@ -9,18 +9,20 @@ export class UserResponseDTO {
   readonly dateOfBirth: Date;
   readonly rol: Rol;
   readonly idLike: [];
+  readonly likes?: [];
 
   constructor(
-    id: string,
+    uuid: string,
     name: string,
     lastName: string,
     userName: string,
     email: string,
     dateOfBirth: Date,
     rol: Rol,
-    idLike: []
+    idLike: [],
+    likes?: []
   ) {
-    this.id = id;
+    this.uuid = uuid;
     this.name = name;
     this.lastName = lastName;
     this.userName = userName;
@@ -28,5 +30,6 @@ export class UserResponseDTO {
     this.dateOfBirth = dateOfBirth;
     this.rol = rol;
     this.idLike = idLike;
+    this.likes = likes;
   }
 }

@@ -1,12 +1,20 @@
 import { Router } from "express";
-import { UserController } from "../controllers/UserController";
+import { RegisterUserController } from "../controllers/user/RegisterUserController";
+import { GetAllUserController } from "../controllers/user/GetAllUserController";
+import { GetOneUserController } from "../controllers/user/GetOneUserController";
+import { DeleteUserController } from "../controllers/user/DeleteUserController";
+import { UpdateUserController } from "../controllers/user/UpdateUserController";
 
 export const userRoute = Router();
 
-const userController = new UserController();
+const registerUserController = new RegisterUserController();
+const getAllUserController = new GetAllUserController();
+const getOneUserController = new GetOneUserController();
+const deleteUserController = new DeleteUserController();
+const updateUserController = new UpdateUserController();
 
-userRoute.get("/", userController.getAllUserCtrl);
-userRoute.get("/:userId", userController.getOneUserCtrl);
-userRoute.post("/", userController.createUserCtrl);
-userRoute.patch("/:userId", userController.updateUserCtrl);
-userRoute.delete("/:userId", userController.deleteUserCtrl);
+userRoute.get("/", getAllUserController.run);
+userRoute.get("/:userId", getOneUserController.run);
+userRoute.post("/", registerUserController.run);
+userRoute.patch("/:userId", updateUserController.run);
+userRoute.delete("/:userId", deleteUserController.run);
