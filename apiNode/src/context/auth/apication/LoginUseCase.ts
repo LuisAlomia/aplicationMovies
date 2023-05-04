@@ -3,7 +3,7 @@ import { IAuthModel } from "../domain/models/IAuthModel";
 import { IAuthRepository } from "../domain/repositories/IAuthRepository";
 import { AuthDTO } from "../domain/DTOs/AuthDTO";
 import { PasswordNotValid } from "../domain/errors/PasswordNotValid";
-import { UserNotFount } from "../domain/errors/UserNotFount";
+import { UserNotFound } from "../domain/errors/UserNotFound";
 import { IUser } from "../../user/domain/models/IUserModel";
 
 export class LoginUseCase {
@@ -16,7 +16,7 @@ export class LoginUseCase {
   async run(auth: IAuthModel): Promise<AuthDTO> {
     const user: IUser | null = await this._authRepository.login(auth.username);
 
-    if (!user) throw new UserNotFount();
+    if (!user) throw new UserNotFound();
 
     const userValidate: boolean = compareSync(auth.password, user.password);
 

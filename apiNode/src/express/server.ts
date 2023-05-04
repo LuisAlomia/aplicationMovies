@@ -1,43 +1,13 @@
-import express, { Application, json } from "express";
-import cors from "cors";
 import { ConnetMongoDB } from "../config/dbConnet";
-
 import { config } from "../config/config.env";
-import { userRoute } from "./routers/UserRoute";
-import { authRoute } from "./routers/AuthRoute";
-import { likeRouter } from "./routers/LikeRoute";
+import { app } from "./app";
 
-export class Server {
-  private app: Application;
-  private port: string | number;
+const port = config.port;
 
-  constructor() {
-    this.app = express();
-    this.port = config.port;
+ConnetMongoDB();
 
-    this.middleware();
-    this.run();
+const server = app.listen(port, () => {
+  console.log("RUN SERVER IN PORT: " + port);
+});
 
-    this.connectDB();
-  }
-
-  connectDB(): void {
-    ConnetMongoDB();
-  }
-
-  middleware(): void {
-    this.app.use(json());
-    this.app.use(cors());
-    this.app.use("/api/v1/users", userRoute);
-    this.app.use("/api/v1/auth", authRoute);
-    this.app.use("/api/v1/like", likeRouter);
-  }
-
-  run(): void {
-    this.app.listen(this.port, () => {
-      console.log("RUN SERVER IN PORT: " + this.port);
-    });
-  }
-}
-
-new Server();
+export { server };
