@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "",
+    "start": "npm run build && node dist/express/server.js",
     "dev": "ts-node-dev ./src/express/server.ts",
-    "tsc": "tsc"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
