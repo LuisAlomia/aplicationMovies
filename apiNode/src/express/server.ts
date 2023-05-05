@@ -1,4 +1,4 @@
-import express, { Application, json } from "express";
+import express, { Application, json, Request, Response } from "express";
 import cors from "cors";
 import { ConnetMongoDB } from "../config/dbConnet";
 
@@ -19,6 +19,7 @@ export class Server {
     this.run();
 
     this.connectDB();
+    this.init();
   }
 
   connectDB(): void {
@@ -31,6 +32,12 @@ export class Server {
     this.app.use("/api/v1/users", userRoute);
     this.app.use("/api/v1/auth", authRoute);
     this.app.use("/api/v1/like", likeRouter);
+  }
+
+  init(): void {
+    this.app.get("/", (_req: Request, resp: Response) => {
+      resp.send("<h1>THIS SERVER IS CREATOR BY LUIS </h1>");
+    });
   }
 
   run(): void {
