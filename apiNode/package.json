@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/src/express/server.js",
+    "build": "tsc",
+    "start": "npm run build && node ./dist/src/express/server.js",
     "test": "cross-env NODE_ENV=test jest --verbose ",
     "test-cov": "jest --coverage",
-    "dev": "cross-env NODE_ENV=dev ts-node-dev ./src/express/server.ts",
-    "build": "tsc"
+    "dev": "cross-env NODE_ENV=dev ts-node-dev ./src/express/server.ts"
   },
   "keywords": [],
   "author": "",
